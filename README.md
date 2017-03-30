@@ -1,14 +1,9 @@
 # clj-euler
 
-A Clojure library designed to ... well, that part is up to you.
+My code for project euler.
 
-## Usage
-
-FIXME
+https://projecteuler.net/profile/rickerbh.png
 
 ## License
 
-Copyright © 2017 FIXME
-
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
+Public Domain. Go nuts.
