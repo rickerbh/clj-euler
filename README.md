@@ -2,7 +2,7 @@
 
 My code for project euler.
 
-https://projecteuler.net/profile/rickerbh.png
+![My Progress](https://projecteuler.net/profile/rickerbh.png)
 
 ## License
 
