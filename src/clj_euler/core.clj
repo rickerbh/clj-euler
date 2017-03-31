@@ -162,6 +162,24 @@
   ([n]
    (reduce + 0 (take-while #(< % n) (lazy-primes)))))
 
+(defn split-digits
+  [n]
+  (->>
+   n
+   (str)
+   (partition 1 1)
+   (flatten)
+   (map #(str->int (str %)))))
+
+(defn p16
+  ([]
+   (p16 1000))
+  ([e]
+   (->>
+    (math/expt 2 e)
+    (split-digits)
+    (apply +))))
+
 (defn p22-name-score
   [name]
   (let [letters (seq (char-array name))]
