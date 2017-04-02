@@ -180,6 +180,20 @@
     (split-digits)
     (apply +))))
 
+(defn p20
+  ([]
+   (p20 100))
+  ([n]
+   (->>
+    n
+    (+ 1)
+    (range 1)
+    (reverse)
+    (map bigint)
+    (reduce *)
+    (split-digits)
+    (reduce +))))
+
 (defn p22-name-score
   [name]
   (let [letters (seq (char-array name))]
