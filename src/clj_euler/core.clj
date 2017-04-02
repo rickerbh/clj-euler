@@ -129,6 +129,10 @@
   [s]
   (Integer/parseInt (re-find #"\d+" s))) ;; \A-?\d+ (also handles negative numbers
 
+(defn str->bigint
+  [s]
+  (BigInteger. (re-find #"\d+" s) 10))
+
 (defn p08
   ([]
    (p08 13))
@@ -170,6 +174,19 @@
    (partition 1 1)
    (flatten)
    (map #(str->int (str %)))))
+
+(defn p13
+  []
+  (let [contents (slurp "resources/p013.txt")]
+    (->
+     contents
+     (str/split #"\n")
+     (->> (map str->bigint)
+          (reduce +))
+     (split-digits)
+     (->> (take 10)
+          (map str)
+          (String/join "")))))
 
 (defn p16
   ([]
