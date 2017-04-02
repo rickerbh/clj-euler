@@ -43,7 +43,7 @@
                       (conj known-primes current))))
      (recur (+' current 2) known-primes))))
 
-(defn factorize [num]
+(defn prime-factors [num]
   (loop [num num
          acc [1]
          primes (lazy-primes)]
@@ -58,7 +58,7 @@
   []
   (let [number 600851475143]
     (println (str "Checking for prime factors of " number ))
-    (println (factorize number))))
+    (println (prime-factors number))))
 
 (defn palindromic?
   [n]
