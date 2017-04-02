@@ -218,9 +218,10 @@
 
 (defn p22
   []
-  (let [contents (str/split (str/replace (slurp "resources/p022_names.txt") #"\"" "") #",")
-        sorted (sort contents)
-        name-scores (map p22-name-score contents)
-        scores (map-indexed #(* (+ 1 %1) %2) name-scores)]
-    (println (reduce + scores))))
+  (let [contents (str/split (str/replace (slurp "resources/p022_names.txt") #"\"" "") #",")]
+    (->> contents
+         (sort)
+         (map p22-name-score)
+         (map-indexed #(* (+ 1 %1) %2))
+         (reduce +))))
 
