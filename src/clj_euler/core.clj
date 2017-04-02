@@ -166,6 +166,30 @@
   ([n]
    (reduce + 0 (take-while #(< % n) (lazy-primes)))))
 
+(defn factors
+  [n]
+  (into (sorted-set)
+        (mapcat (fn [x] [x (/ n x)])
+                (filter #(zero? (rem n %)) (range 1 (inc (Math/sqrt n)))) )))
+
+(defn triangle-numbers
+  ([]
+   (triangle-numbers 1))
+  ([n]
+   (let [next (inc n)
+         result (reduce + (range 1 next))]
+     (lazy-seq (cons result (triangle-numbers next))))))
+
+(defn p12
+  ([]
+   (p12 500))
+  ([n] 
+   (->> (triangle-numbers)
+        (map factors)
+        (drop-while #(< (count %) n))
+        (first)
+        (last))))
+
 (defn split-digits
   [n]
   (->>
