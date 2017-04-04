@@ -212,6 +212,35 @@
           (map str)
           (String/join "")))))
 
+(defn- collatz-g
+  [n] 
+  (if (even? n)
+    (let [x (/ n 2)]
+      (if (= x 1)
+        '(1)
+        (cons x (collatz-g x))))
+    (let [x (+ 1 (* 3 n))]
+      (cons x (collatz-g x)))))
+
+(defn collatz
+  [n]
+  (cons n (collatz-g n)))
+
+(defn p14
+  []
+  (let [max 1000000]
+    (->> max
+         (range 1)
+         (reduce (fn [acc n]
+                   (let [c (collatz n)
+                         size (count c)
+                         acc-size (count (:collatz acc))]
+                     (if (< (count (:collatz acc)) size) 
+                       { :number n :collatz c }
+                       acc)))
+                 { :number 0 :collatz '()})
+         :number)))
+
 (defn p16
   ([]
    (p16 1000))
