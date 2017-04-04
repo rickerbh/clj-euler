@@ -264,6 +264,27 @@
     (split-digits)
     (reduce +))))
 
+(defn proper-divisors
+  [n]
+  (->> n
+       (factors)
+       (drop-last)))
+
+(defn amicable-numbers?
+  [n]
+  (let [s1 (reduce + (proper-divisors n))
+        s2 (reduce + (proper-divisors s1))]
+    (and (= s2 n)
+         (not= s1 s2))))
+
+(defn p21
+  []
+  (let [max 10000]
+    (->> max
+         (range 1)
+         (filter amicable-numbers?)
+         (reduce +))))
+
 (defn p22-name-score
   [name]
   (let [letters (seq (char-array name))]
