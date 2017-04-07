@@ -348,3 +348,18 @@
    (p24 (range 0 10) 1000000))
   ([r n]
    (take 1 (drop (dec n) (combo/permutations r)))))
+
+(defn indexed-fib
+  ([]
+   (indexed-fib  1 (BigInteger/valueOf 1) (BigInteger/valueOf 1)))
+  ([i a b]
+   (lazy-seq (cons {:index i :value a} (indexed-fib (inc i) b (+ a b))))))
+
+(defn p25
+  ([]
+   (p25 1000))
+  ([d]
+   (->> (indexed-fib)
+        (drop-while #(< (count (str (:value %))) d))
+        (first)
+        (:index))))
