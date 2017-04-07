@@ -342,3 +342,9 @@
                              (sort))]
     (->> (filter #(not (contains-val? summed-abundants %)) (range 1 (inc max))) 
          (reduce +))))
+
+(defn p24
+  ([]
+   (p24 (range 0 10) 1000000))
+  ([r n]
+   (take 1 (drop (dec n) (combo/permutations r)))))
