@@ -299,3 +299,46 @@
          (map-indexed #(* (+ 1 %1) %2))
          (reduce +))))
 
+(defn divisors-sum
+  [n]
+  (->> n
+       (proper-divisors)
+       (reduce +)))
+
+(defn perfect-number?
+  [n]
+  (= (divisors-sum n) n))
+
+(defn deficient-number?
+  [n]
+  (< (divisors-sum n) n))
+
+(defn abundant-number?
+  [n]
+  (> (divisors-sum n) n))
+
+(defn natural-numbers
+  ([]
+   (natural-numbers 1))
+  ([n]
+   (lazy-seq (cons n (natural-numbers (inc n))))))
+
+(defn abundant-numbers
+  []
+  (filter abundant-number? (natural-numbers)))
+
+(defn contains-val?
+  [coll val]
+  (reduce #(if (= val %2) (reduced true) %1) false coll))
+
+(defn p23
+  []
+  (let [max (inc 28123)
+        abundant-range (take-while #(< % max) (abundant-numbers))
+        summed-abundants (-> (into abundant-range abundant-range)
+                             (combo/combinations 2)
+                             (->> (map (partial apply +))) 
+                             (set)
+                             (sort))]
+    (->> (filter #(not (contains-val? summed-abundants %)) (range 1 (inc max))) 
+         (reduce +))))
