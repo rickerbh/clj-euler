@@ -166,6 +166,80 @@
   ([n]
    (reduce + 0 (take-while #(< % n) (lazy-primes)))))
 
+(defn item-at
+  [row col coll] 
+  (->> (drop row coll)
+       (first)
+       (drop col)
+       (first)))
+
+(defn left-top-row-start-points
+  [coll]
+  (let [item-count (count (first coll))]
+    (loop [row item-count
+           col 0
+           result '()]
+      (if (= row 0)
+        (if (= col item-count)
+          result
+          (recur row (inc col) (cons [col row] result)))
+        (recur (dec row) col (cons [col row] result)))
+      )))
+
+(defn left-bottom-row-start-points
+  [coll]
+  (let [item-count (count (first coll))]
+    (loop [row 0
+           col 0
+           result '()]
+      (if (= row (dec item-count))
+        (if (= col item-count)
+          (reverse result)
+          (recur row (inc col) (cons [row col] result)))
+        (recur (inc row) col (cons [row col] result)))
+      )))
+
+(defn top-down-right-diag
+  [row col coll] 
+  (if (or (= row 20) (= col 20))
+    '()
+    (lazy-seq (cons (item-at row col coll) (top-down-right-diag (inc row) (inc col) coll)))))
+
+(defn bottom-up-right-diag
+  [row col coll] 
+  (if (or (< row 0) (= col 20))
+    '()
+    (lazy-seq (cons (item-at row col coll) (bottom-up-right-diag (dec row) (inc col) coll)))))
+
+(defn diagonal-generator
+  [starting-points traverser coll]
+  (filter #(>= (count % ) 4) (map #(traverser (first %) (last %) coll) (starting-points coll))))
+
+(defn p11
+  []
+  (let [partitioner (partial map #(partition 4 1 %))
+        unnest (partial reduce into '())
+        unnesting-partitioner (fn [coll] (-> coll (partitioner) (unnest)))
+        items (-> "resources/p011.txt"
+                  (slurp)
+                  (str/split-lines)
+                  (->> (map #(str/split % #"\s+"))
+                       (map #(map str->int %))))
+        horizontal-options (unnesting-partitioner items)
+        items-v (partition (count items) (apply interleave items))
+        vertical-options (unnesting-partitioner items-v)
+        ltr-options (->> items
+                         (diagonal-generator left-top-row-start-points top-down-right-diag)
+                         (unnesting-partitioner))
+        rtl-options (->> items
+                         (diagonal-generator left-bottom-row-start-points bottom-up-right-diag)
+                         (unnesting-partitioner))]    
+    (->> [horizontal-options vertical-options rtl-options ltr-options] 
+         (unnest) 
+         (map #(apply * %))
+         (sort)
+         (last))))
+
 (defn factors
   [n]
   (into (sorted-set)
