@@ -278,7 +278,7 @@
   (let [contents (slurp "resources/p013.txt")]
     (->
      contents
-     (str/split #"\n")
+     (str/split-lines)
      (->> (map str->bigint)
           (reduce +))
      (split-digits)
